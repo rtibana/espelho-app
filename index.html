@@ -2,8 +2,21 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Espelho — seu espaço de reflexão</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#5a7a6e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Espelho">
+<meta name="description" content="Um espaço para pensar em voz alta. Sem julgamentos, sem respostas prontas.">
+
+<!-- PWA manifest -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Ícones para iOS (Safari não usa o manifest) -->
+<link rel="apple-touch-icon" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+
+<title>Espelho</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -15,22 +28,30 @@
     --user-border:rgba(90,122,110,0.2);
     --ai-bg:#ffffff; --ai-border:rgba(0,0,0,0.08);
     --recording:#e74c3c; --memory:#6b8fa0; --memory-bg:#eef4f7;
+    /* Safe area para iPhones com notch */
+    --safe-top: env(safe-area-inset-top);
+    --safe-bottom: env(safe-area-inset-bottom);
   }
   *{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;font-size:15px;}
+  body{
+    font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);
+    min-height:100vh;display:flex;flex-direction:column;font-size:15px;
+    /* Evita bounce scroll no iOS */
+    overscroll-behavior:none;
+  }
 
   /* Setup */
-  #setup{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;min-height:100vh;}
+  #setup{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(40px + var(--safe-top)) 20px calc(40px + var(--safe-bottom));min-height:100vh;}
   .logo{font-size:36px;font-weight:300;letter-spacing:-0.02em;color:var(--text);margin-bottom:8px;}
   .logo span{color:var(--accent);font-weight:500;}
   .tagline{font-size:14px;color:var(--muted);margin-bottom:48px;letter-spacing:0.03em;text-align:center;line-height:1.6;max-width:320px;}
   .setup-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:28px;width:100%;max-width:400px;box-shadow:0 2px 12px rgba(0,0,0,0.06);}
   .setup-card label{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;}
-  .setup-card input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;padding:11px 13px;outline:none;transition:border-color 0.2s;margin-bottom:20px;}
+  .setup-card input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;padding:11px 13px;outline:none;transition:border-color 0.2s;margin-bottom:20px;-webkit-appearance:none;}
   .setup-card input:focus{border-color:var(--accent);}
   .setup-card input::placeholder{color:var(--muted);}
-  .start-btn{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:500;cursor:pointer;transition:opacity 0.2s;}
-  .start-btn:hover{opacity:0.88;}
+  .start-btn{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:16px;font-weight:500;cursor:pointer;transition:opacity 0.2s;-webkit-tap-highlight-color:transparent;}
+  .start-btn:active{opacity:0.8;}
   .start-btn:disabled{opacity:0.35;cursor:not-allowed;}
   .note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.6;}
   .note a{color:var(--accent);text-decoration:none;}
@@ -39,67 +60,92 @@
   .memory-notice strong{font-weight:500;}
   .memory-clear{font-size:11px;color:var(--muted);text-decoration:underline;cursor:pointer;display:block;margin-top:6px;}
 
+  /* Banner de instalação PWA */
+  #installBanner{
+    display:none;position:fixed;bottom:0;left:0;right:0;
+    background:var(--bg2);border-top:1px solid var(--border);
+    padding:16px 20px calc(16px + var(--safe-bottom));
+    box-shadow:0 -4px 20px rgba(0,0,0,0.08);
+    z-index:100;animation:slideUp 0.3s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .install-content{display:flex;align-items:center;gap:12px;max-width:480px;margin:0 auto;}
+  .install-icon{width:44px;height:44px;border-radius:10px;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .install-icon svg{width:22px;height:22px;stroke:white;}
+  .install-text{flex:1;}
+  .install-text strong{display:block;font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px;}
+  .install-text span{font-size:12px;color:var(--muted);}
+  .install-btn{padding:8px 16px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;flex-shrink:0;}
+  .install-dismiss{padding:8px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;flex-shrink:0;}
+
   /* Chat */
-  #chat{display:none;flex-direction:column;height:100vh;}
-  .chat-header{padding:14px 20px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  #chat{display:none;flex-direction:column;height:100vh;height:100dvh;}
+  .chat-header{
+    padding:calc(14px + var(--safe-top)) 20px 14px;
+    background:var(--bg2);border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+  }
   .chat-header-left{display:flex;align-items:center;gap:10px;}
   .header-logo{font-size:18px;font-weight:300;color:var(--text);}
   .header-logo span{color:var(--accent);font-weight:500;}
   .header-right{display:flex;align-items:center;gap:8px;}
   .session-count{font-size:11px;color:var(--memory);background:var(--memory-bg);border:1px solid rgba(107,143,160,0.2);padding:3px 10px;border-radius:99px;display:none;}
-  .reset-btn{font-size:12px;color:var(--muted);background:none;border:1px solid var(--border);border-radius:6px;padding:5px 12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.15s;}
-  .reset-btn:hover{color:var(--text);border-color:var(--border2);}
+  .reset-btn{font-size:12px;color:var(--muted);background:none;border:1px solid var(--border);border-radius:6px;padding:5px 12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.15s;-webkit-tap-highlight-color:transparent;}
+  .reset-btn:active{background:var(--bg3);}
 
-  .messages{flex:1;overflow-y:auto;padding:28px 20px;display:flex;flex-direction:column;gap:20px;scroll-behavior:smooth;background:var(--bg);}
-  .messages::-webkit-scrollbar{width:4px;}
+  .messages{flex:1;overflow-y:auto;padding:24px 16px;display:flex;flex-direction:column;gap:18px;scroll-behavior:smooth;background:var(--bg);-webkit-overflow-scrolling:touch;}
+  .messages::-webkit-scrollbar{width:3px;}
   .messages::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
   .center-messages{margin:auto;width:100%;max-width:680px;}
 
-  .msg{display:flex;gap:12px;max-width:680px;width:100%;animation:fadeUp 0.25s ease;}
+  .msg{display:flex;gap:10px;max-width:680px;width:100%;animation:fadeUp 0.25s ease;}
   @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
   .msg.user{align-self:flex-end;flex-direction:row-reverse;}
   .msg.ai{align-self:flex-start;}
 
-  .avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;}
+  .avatar{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;}
   .avatar.ai{background:var(--accent-light);color:var(--accent);border:1px solid var(--user-border);}
   .avatar.user{background:var(--user-bg);color:var(--accent);border:1px solid var(--user-border);}
 
-  .bubble{padding:12px 16px;border-radius:14px;font-size:15px;line-height:1.65;max-width:540px;}
+  .bubble{padding:11px 15px;border-radius:14px;font-size:15px;line-height:1.65;max-width:min(520px, calc(100vw - 80px));}
   .msg.user .bubble{background:var(--user-bg);border:1px solid var(--user-border);color:var(--text);border-top-right-radius:4px;}
   .msg.ai .bubble{background:var(--ai-bg);border:1px solid var(--ai-border);color:var(--text);border-top-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
 
-  .memory-card{background:var(--memory-bg);border:1px solid rgba(107,143,160,0.25);border-radius:12px;padding:14px 16px;max-width:540px;align-self:flex-start;animation:fadeUp 0.25s ease;margin-bottom:4px;}
-  .memory-card-title{font-size:11px;font-weight:500;color:var(--memory);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px;}
-  .memory-card-body{font-size:14px;color:var(--text);line-height:1.65;}
-  .memory-card-sessions{font-size:11px;color:var(--muted);margin-top:8px;}
+  .memory-card{background:var(--memory-bg);border:1px solid rgba(107,143,160,0.25);border-radius:12px;padding:13px 15px;max-width:min(520px,calc(100vw - 80px));align-self:flex-start;animation:fadeUp 0.25s ease;margin-bottom:4px;}
+  .memory-card-title{font-size:11px;font-weight:500;color:var(--memory);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px;}
+  .memory-card-body{font-size:13px;color:var(--text);line-height:1.6;}
+  .memory-card-sessions{font-size:11px;color:var(--muted);margin-top:6px;}
 
   .welcome-msg{font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:20px;font-weight:300;}
   .welcome-msg strong{color:var(--accent);font-weight:500;}
 
   .starters{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
-  .starter-btn{padding:11px 16px;border-radius:10px;font-size:14px;cursor:pointer;transition:all 0.15s;border:1px solid var(--border2);background:var(--bg2);color:var(--text);font-family:'Inter',sans-serif;text-align:left;line-height:1.4;}
-  .starter-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+  .starter-btn{padding:12px 15px;border-radius:10px;font-size:14px;cursor:pointer;transition:all 0.15s;border:1px solid var(--border2);background:var(--bg2);color:var(--text);font-family:'Inter',sans-serif;text-align:left;line-height:1.4;-webkit-tap-highlight-color:transparent;}
+  .starter-btn:active{background:var(--accent-light);border-color:var(--accent);}
 
-  .typing{display:flex;gap:5px;align-items:center;padding:14px 16px;}
+  .typing{display:flex;gap:5px;align-items:center;padding:12px 15px;}
   .dot{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:pulse 1.2s ease-in-out infinite;}
   .dot:nth-child(2){animation-delay:0.2s;}
   .dot:nth-child(3){animation-delay:0.4s;}
   @keyframes pulse{0%,100%{opacity:0.3;transform:scale(0.8)}50%{opacity:1;transform:scale(1)}}
 
   /* Input */
-  .input-area{padding:12px 20px 20px;border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;}
+  .input-area{
+    padding:10px 16px calc(12px + var(--safe-bottom));
+    border-top:1px solid var(--border);background:var(--bg2);flex-shrink:0;
+  }
   .input-row{display:flex;gap:8px;align-items:flex-end;background:var(--bg3);border:1px solid var(--border2);border-radius:14px;padding:8px 8px 8px 14px;transition:border-color 0.2s;max-width:680px;margin:0 auto;}
   .input-row:focus-within{border-color:var(--accent);}
-  #userInput{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;resize:none;min-height:24px;max-height:120px;line-height:1.5;}
+  #userInput{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'Inter',sans-serif;font-size:16px;resize:none;min-height:24px;max-height:120px;line-height:1.5;}
   #userInput::placeholder{color:var(--muted);}
-  .icon-btn{width:36px;height:36px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;background:transparent;}
-  .icon-btn svg{width:18px;height:18px;}
+  .icon-btn{width:38px;height:38px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;background:transparent;-webkit-tap-highlight-color:transparent;}
+  .icon-btn svg{width:20px;height:20px;}
   #micBtn{color:var(--muted);}
-  #micBtn:hover{background:var(--border);}
+  #micBtn:active{background:var(--border);}
   #micBtn.recording{background:#fde8e8;color:var(--recording);animation:micPulse 1s ease-in-out infinite;}
   @keyframes micPulse{0%,100%{opacity:1}50%{opacity:0.55}}
   #sendBtn{background:var(--accent);}
-  #sendBtn:hover{opacity:0.88;background:var(--accent);}
+  #sendBtn:active{opacity:0.8;background:var(--accent);}
   #sendBtn:disabled{opacity:0.3;cursor:not-allowed;}
 
   .voice-status{text-align:center;font-size:12px;color:var(--recording);height:18px;max-width:680px;margin:5px auto 0;}
@@ -114,16 +160,13 @@
   <div class="tagline">Um espaço para pensar em voz alta.<br>Sem julgamentos, sem respostas prontas.</div>
   <div class="setup-card">
     <div class="memory-notice" id="memoryNotice"></div>
-
     <label>Seu nome</label>
-    <input type="text" id="userName" placeholder="Como posso te chamar?">
-
+    <input type="text" id="userName" placeholder="Como posso te chamar?" autocomplete="given-name">
     <label>Chave da API Anthropic</label>
     <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off">
-
     <button class="start-btn" id="startBtn" disabled onclick="startChat()">Entrar →</button>
     <p class="note">
-      Sua memória fica salva só neste dispositivo, nunca em servidores externos.<br>
+      Sua memória fica salva só neste dispositivo.<br>
       <a href="https://console.anthropic.com/settings/keys" target="_blank">Obter chave gratuita →</a>
     </p>
   </div>
@@ -137,17 +180,15 @@
     </div>
     <div class="header-right">
       <span class="session-count" id="sessionCount"></span>
-      <button class="reset-btn" onclick="endAndReset()">encerrar sessão</button>
+      <button class="reset-btn" onclick="endAndReset()">encerrar</button>
     </div>
   </div>
-
   <div class="messages" id="messages">
     <div class="center-messages">
       <div id="welcomeArea"></div>
       <div class="starters" id="starters"></div>
     </div>
   </div>
-
   <div class="input-area">
     <div class="input-row">
       <textarea id="userInput" placeholder="O que está passando pela sua cabeça agora?" rows="1"
@@ -172,8 +213,64 @@
   </div>
 </div>
 
+<!-- Banner de instalação PWA (Android/Chrome) -->
+<div id="installBanner">
+  <div class="install-content">
+    <div class="install-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+    </div>
+    <div class="install-text">
+      <strong>Instalar Espelho</strong>
+      <span>Adicione à tela inicial para acesso rápido</span>
+    </div>
+    <button class="install-btn" onclick="installPWA()">Instalar</button>
+    <button class="install-dismiss" onclick="dismissInstall()">×</button>
+  </div>
+</div>
+
 <script>
-/* ── System prompt unificado ── */
+/* ── PWA: Service Worker + Install ── */
+let deferredInstallPrompt = null;
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('SW registrado:', reg.scope))
+      .catch(err => console.log('SW falhou:', err));
+  });
+}
+
+// Captura o evento de instalação (Android/Chrome)
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  // Mostra o banner após 3 segundos
+  setTimeout(() => {
+    if (!localStorage.getItem('pwa_dismissed')) {
+      document.getElementById('installBanner').style.display = 'block';
+    }
+  }, 3000);
+});
+
+function installPWA() {
+  if (!deferredInstallPrompt) return;
+  deferredInstallPrompt.prompt();
+  deferredInstallPrompt.userChoice.then(result => {
+    if (result.outcome === 'accepted') dismissInstall();
+    deferredInstallPrompt = null;
+  });
+}
+
+function dismissInstall() {
+  document.getElementById('installBanner').style.display = 'none';
+  localStorage.setItem('pwa_dismissed', '1');
+}
+
+/* ── System Prompt ── */
 const SYSTEM_PROMPT = `Você é um interlocutor socrático empático e inteligente, especializado em acompanhamento emocional e desenvolvimento pessoal.
 
 Seu papel é ajudar a pessoa a explorar seus próprios pensamentos, sentimentos e crenças por meio de perguntas cuidadosas — nunca dar conselhos diretos, diagnósticos ou respostas prontas.
@@ -181,7 +278,7 @@ Seu papel é ajudar a pessoa a explorar seus próprios pensamentos, sentimentos 
 MÉTODO:
 - Faça sempre UMA pergunta por vez — profunda, gentil, que abra novos ângulos
 - Reflita de volta o que a pessoa disse antes de perguntar
-- Detecte o tema naturalmente (saúde mental, relacionamentos, identidade, trabalho, crenças, família...) e adapte seu tom sem nomear a categoria
+- Detecte o tema naturalmente e adapte seu tom sem nomear a categoria
 - Se o tema mudar no meio da conversa, acompanhe sem forçar continuidade
 - Respostas curtas: no máximo 3 frases + 1 pergunta
 - Nunca minimize, nunca resolva: aprofunde
@@ -194,7 +291,6 @@ TOM POR CONTEXTO:
 
 IMPORTANTE: Nunca sugira diagnósticos. Nunca tome partido em conflitos relacionais. Nunca dê listas de dicas. Você faz perguntas, não dá respostas.`;
 
-/* ── Sugestões de início (genéricas, sem tema) ── */
 const STARTERS = [
   'Algo está me pesando e não sei bem o que é',
   'Quero entender melhor como me sinto',
@@ -205,15 +301,10 @@ const STARTERS = [
 
 /* ── Memória ── */
 const MAX_SESSIONS = 10;
-const MEM_KEY = name => `espelho_${name.toLowerCase().replace(/\s+/g,'_')}`;
+const MEM_KEY = n => `espelho_${n.toLowerCase().replace(/\s+/g,'_')}`;
 
-function loadMemory(name){
-  try{ const r=localStorage.getItem(MEM_KEY(name)); return r?JSON.parse(r):[]; }
-  catch{ return []; }
-}
-function saveMemory(name, sessions){
-  try{ localStorage.setItem(MEM_KEY(name), JSON.stringify(sessions)); } catch{}
-}
+function loadMemory(name){ try{ const r=localStorage.getItem(MEM_KEY(name)); return r?JSON.parse(r):[]; } catch{ return []; } }
+function saveMemory(name,sessions){ try{ localStorage.setItem(MEM_KEY(name),JSON.stringify(sessions)); } catch{} }
 function buildMemorySummary(sessions){
   if(!sessions.length) return null;
   return sessions.slice(-5).map(s=>{
@@ -222,13 +313,12 @@ function buildMemorySummary(sessions){
   }).join('\n');
 }
 function buildSessionSummary(history){
-  return history.filter(m=>m.role==='user').slice(0,6)
-    .map(m=>m.content.slice(0,120)).join(' · ') || 'Sessão sem falas.';
+  return history.filter(m=>m.role==='user').slice(0,6).map(m=>m.content.slice(0,120)).join(' · ')||'Sessão sem falas.';
 }
 function saveCurrentSession(){
   if(!userName||conversationHistory.length<2) return;
   const sessions=loadMemory(userName);
-  sessions.push({ date:new Date().toISOString(), summary:buildSessionSummary(conversationHistory), messages:conversationHistory.slice(-20) });
+  sessions.push({date:new Date().toISOString(),summary:buildSessionSummary(conversationHistory),messages:conversationHistory.slice(-20)});
   if(sessions.length>MAX_SESSIONS) sessions.splice(0,sessions.length-MAX_SESSIONS);
   saveMemory(userName,sessions);
 }
@@ -242,16 +332,18 @@ let isLoading=false, recognition=null, isRecording=false;
 document.addEventListener('DOMContentLoaded',()=>{
   const nameInput=document.getElementById('userName');
   const keyInput=document.getElementById('apiKey');
-
   function refresh(){
-    const name=nameInput.value.trim();
-    const key=keyInput.value.trim();
+    const name=nameInput.value.trim(), key=keyInput.value.trim();
     document.getElementById('startBtn').disabled=!(name&&key);
     showMemoryNotice(name);
   }
-
   nameInput.addEventListener('input',refresh);
   keyInput.addEventListener('input',refresh);
+
+  // Salva sessão se fechar/recarregar o app
+  window.addEventListener('pagehide', saveCurrentSession);
+  window.addEventListener('beforeunload', saveCurrentSession);
+
   setupVoice();
 });
 
@@ -260,10 +352,9 @@ function showMemoryNotice(name){
   if(!name){ notice.style.display='none'; return; }
   const sessions=loadMemory(name);
   if(!sessions.length){ notice.style.display='none'; return; }
-  const last=new Date(sessions[sessions.length-1].date);
-  const d=last.toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});
+  const d=new Date(sessions[sessions.length-1].date).toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});
   notice.style.display='block';
-  notice.innerHTML=`<strong>Bem-vindo(a) de volta, ${name}.</strong> Há ${sessions.length} sessão(ões) salva(s) neste dispositivo (última em ${d}). O app vai lembrar do que conversamos.
+  notice.innerHTML=`<strong>Bem-vindo(a) de volta, ${name}.</strong> ${sessions.length} sessão(ões) salva(s) (última em ${d}).
     <span class="memory-clear" onclick="clearMemory('${name}')">Apagar memória</span>`;
 }
 
@@ -275,26 +366,22 @@ function clearMemory(name){
 function startChat(){
   userName=document.getElementById('userName').value.trim();
   apiKey=document.getElementById('apiKey').value.trim();
-
   const sessions=loadMemory(userName);
   sessionMemory=buildMemorySummary(sessions);
 
   document.getElementById('setup').style.display='none';
   document.getElementById('chat').style.display='flex';
 
-  // contador de sessões
   const sc=document.getElementById('sessionCount');
-  if(sessions.length>0){ sc.textContent=sessions.length+' sessão(ões) na memória'; sc.style.display='inline-block'; }
+  if(sessions.length>0){ sc.textContent=sessions.length+' na memória'; sc.style.display='inline-block'; }
 
-  // boas-vindas
   const returning=sessions.length>0;
   document.getElementById('welcomeArea').innerHTML=`
     <div class="welcome-msg">
       ${returning?`Olá de novo, <strong>${userName}</strong>. Lembro das nossas conversas.`:`Olá, <strong>${userName}</strong>. Este é um espaço só seu.`}<br>
-      Fale o que quiser — não há temas certos ou errados para começar.
+      Fale o que quiser — não há temas certos ou errados.
     </div>`;
 
-  // card de memória
   if(sessionMemory){
     const last=sessions[sessions.length-1];
     const d=new Date(last.date).toLocaleDateString('pt-BR',{day:'2-digit',month:'long'});
@@ -302,11 +389,10 @@ function startChat(){
     card.className='memory-card';
     card.innerHTML=`<div class="memory-card-title">memória das conversas anteriores</div>
       <div class="memory-card-body">${sessionMemory.replace(/\n/g,'<br>')}</div>
-      <div class="memory-card-sessions">Última sessão: ${d} · ${sessions.length} salva(s) neste dispositivo</div>`;
+      <div class="memory-card-sessions">Última sessão: ${d} · ${sessions.length} salva(s)</div>`;
     document.getElementById('messages').appendChild(card);
   }
 
-  // sugestões de início
   const startersEl=document.getElementById('starters');
   startersEl.innerHTML='';
   STARTERS.forEach(s=>{
@@ -315,7 +401,6 @@ function startChat(){
     btn.onclick=()=>quickStart(s);
     startersEl.appendChild(btn);
   });
-
   conversationHistory=[];
 }
 
@@ -323,8 +408,7 @@ function endAndReset(){
   saveCurrentSession();
   document.getElementById('chat').style.display='none';
   document.getElementById('setup').style.display='flex';
-  document.getElementById('messages').innerHTML=
-    '<div class="center-messages"><div id="welcomeArea"></div><div class="starters" id="starters"></div></div>';
+  document.getElementById('messages').innerHTML='<div class="center-messages"><div id="welcomeArea"></div><div class="starters" id="starters"></div></div>';
   document.getElementById('sessionCount').style.display='none';
   conversationHistory=[]; sessionMemory=null;
   showMemoryNotice(document.getElementById('userName').value.trim());
@@ -354,21 +438,14 @@ function setupVoice(){
   };
   recognition.onend=()=>stopRecording();
 }
-function stopRecording(){
-  isRecording=false; document.getElementById('micBtn').classList.remove('recording');
-  if(document.getElementById('voiceStatus').textContent.includes('Ouvindo')) document.getElementById('voiceStatus').textContent='';
-}
-function toggleVoice(){
-  if(!recognition) return;
-  if(isRecording){ recognition.stop(); } else { document.getElementById('userInput').value=''; recognition.start(); }
-}
+function stopRecording(){ isRecording=false; document.getElementById('micBtn').classList.remove('recording'); if(document.getElementById('voiceStatus').textContent.includes('Ouvindo')) document.getElementById('voiceStatus').textContent=''; }
+function toggleVoice(){ if(!recognition) return; if(isRecording){ recognition.stop(); } else { document.getElementById('userInput').value=''; recognition.start(); } }
 
 /* ── Chat ── */
 function quickStart(text){
   document.getElementById('starters').style.display='none';
   document.getElementById('welcomeArea').style.display='none';
-  document.getElementById('userInput').value=text;
-  sendMessage();
+  document.getElementById('userInput').value=text; sendMessage();
 }
 function autoResize(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
 function handleKey(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
@@ -397,26 +474,20 @@ async function sendMessage(){
   if(isLoading) return;
   if(isRecording&&recognition) recognition.stop();
   const input=document.getElementById('userInput');
-  const text=input.value.trim();
-  if(!text) return;
-
+  const text=input.value.trim(); if(!text) return;
   input.value=''; input.style.height='auto';
   document.getElementById('starters').style.display='none';
   document.getElementById('welcomeArea').style.display='none';
   document.getElementById('voiceStatus').textContent='';
-
   addMessage('user',text);
   conversationHistory.push({role:'user',content:text});
-
   isLoading=true;
   document.getElementById('sendBtn').disabled=true;
   document.getElementById('micBtn').disabled=true;
   addTyping();
-
   try{
     let system=SYSTEM_PROMPT+`\n\nO nome da pessoa é ${userName}.`;
-    if(sessionMemory) system+=`\n\nMEMÓRIA DE SESSÕES ANTERIORES:\n${sessionMemory}\n\nUse essas informações para dar continuidade natural à jornada da pessoa quando relevante — sem forçar referências.`;
-
+    if(sessionMemory) system+=`\n\nMEMÓRIA DE SESSÕES ANTERIORES:\n${sessionMemory}\n\nUse essas informações para dar continuidade natural quando relevante — sem forçar referências.`;
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
@@ -424,7 +495,7 @@ async function sendMessage(){
     });
     const data=await res.json();
     removeTyping();
-    if(data.error){ addMessage('ai','Erro: '+(data.error.message||'Chave inválida ou limite atingido.')); }
+    if(data.error){ addMessage('ai','Erro: '+(data.error.message||'Chave inválida.')); }
     else{
       const reply=data.content?.[0]?.text||'...';
       conversationHistory.push({role:'assistant',content:reply});
@@ -434,7 +505,6 @@ async function sendMessage(){
     removeTyping();
     addMessage('ai','Não foi possível conectar. Verifique sua chave e conexão.');
   }
-
   isLoading=false;
   document.getElementById('sendBtn').disabled=false;
   document.getElementById('micBtn').disabled=false;
