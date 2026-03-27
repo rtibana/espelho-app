@@ -420,6 +420,7 @@ async function sendMessage(){
   document.getElementById('voiceStatus').textContent='';
   addMessage('user',text);
   conversationHistory.push({role:'user',content:text});
+  saveCurrentSession();
   isLoading=true; document.getElementById('sendBtn').disabled=true; document.getElementById('micBtn').disabled=true;
   addTyping();
   try{
@@ -432,7 +433,7 @@ async function sendMessage(){
     });
     const data=await res.json(); removeTyping();
     if(data.error){ addMessage('ai','Erro: '+(data.error.message||'Chave inválida.')); }
-    else{ const reply=data.content?.[0]?.text||'...'; conversationHistory.push({role:'assistant',content:reply}); addMessage('ai',reply); }
+    else{ const reply=data.content?.[0]?.text||'...'; conversationHistory.push({role:'assistant',content:reply}); addMessage('ai',reply); saveCurrentSession(); }
   } catch { removeTyping(); addMessage('ai','Não foi possível conectar. Verifique sua chave e conexão.'); }
   isLoading=false; document.getElementById('sendBtn').disabled=false; document.getElementById('micBtn').disabled=false;
   document.getElementById('userInput').focus();
