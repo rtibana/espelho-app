@@ -1,0 +1,2 @@
+# espelho-app
+App socrático
