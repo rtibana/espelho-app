@@ -243,7 +243,7 @@
 let deferredInstallPrompt=null;
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
-    navigator.serviceWorker.register('sw.js?v=3',{scope:'/espelho-app/'}).catch(e=>console.warn('SW:',e));
+    navigator.serviceWorker.register('sw.js?v=4',{scope:'/espelho-app/'}).catch(e=>console.warn('SW:',e));
   });
 }
 window.addEventListener('beforeinstallprompt',e=>{
@@ -633,7 +633,7 @@ async function sendMessage(fromBtn=false, overrideText=null){
     if(err.name==='AbortError') msg='A resposta demorou demais (timeout). Tente de novo.';
     else if(!navigator.onLine) msg='Sem internet. Reconecte e tente de novo.';
     else if(err.message&&err.message.includes('Failed to fetch')) msg='Erro de rede. Se o problema persistir, tente fechar e reabrir o app.';
-    else msg='Erro inesperado: '+err.name+'. Tente de novo.';
+    else msg='Erro ('+err.name+'): '+(err.message||'desconhecido')+'. Tente de novo.';
     addMessage('ai',msg);
     document.getElementById('endWithSummaryBtn').disabled=false;
     document.getElementById('endWithSummaryBtn').textContent='encerrar';
