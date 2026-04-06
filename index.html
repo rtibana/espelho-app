@@ -594,14 +594,30 @@ async function sendMessage(fromBtn=false, overrideText=null){
   try{
     let system=SYSTEM_PROMPT+`\n\nO nome da pessoa é ${userName}.`;
     if(sessionMemory) system+=`\n\nMEMÓRIA DE SESSÕES ANTERIORES:\n${sessionMemory}\n\nUse para dar continuidade quando relevante.`;
+
+    // Timeout de 30s para evitar espera infinita
+    const controller=new AbortController();
+    const timeout=setTimeout(()=>controller.abort(),30000);
+
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
+      signal:controller.signal,
       headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-5-20250929',max_tokens:600,system,messages:conversationHistory})
+      body:JSON.stringify({model:'claude-sonnet-4-5-20250929',max_tokens:600,system,
+        messages:conversationHistory.slice(-20)})
     });
-    const data=await res.json();removeTyping();
+    clearTimeout(timeout);
+    const data=await res.json();
+    removeTyping();
+
     if(data.error){
-      addMessage('ai','Erro: '+(data.error.message||'Chave inválida.'));
+      const tipo=data.error.type||'';
+      let msg='Algo deu errado. Tente novamente.';
+      if(tipo==='authentication_error'||res.status===401) msg='Chave de API inválida. Verifique nas configurações (⚙).';
+      else if(tipo==='rate_limit_error'||res.status===429) msg='Muitas mensagens seguidas. Aguarde alguns segundos e tente de novo.';
+      else if(res.status===529||tipo==='overloaded_error') msg='O serviço está sobrecarregado agora. Tente em alguns instantes.';
+      else if(data.error.message) msg=data.error.message;
+      addMessage('ai',msg);
       document.getElementById('endWithSummaryBtn').disabled=false;
       document.getElementById('endWithSummaryBtn').textContent='encerrar';
     } else {
@@ -610,9 +626,13 @@ async function sendMessage(fromBtn=false, overrideText=null){
       addMessage('ai',reply);
       saveCurrentSession();
     }
-  } catch {
+  } catch(err) {
     removeTyping();
-    addMessage('ai','Não foi possível conectar. Verifique sua chave e conexão.');
+    let msg='';
+    if(err.name==='AbortError') msg='A resposta demorou demais. Verifique sua conexão e tente de novo.';
+    else if(!navigator.onLine) msg='Sem conexão com a internet. Reconecte e tente de novo.';
+    else msg='Não foi possível conectar. Verifique sua conexão e tente de novo.';
+    addMessage('ai',msg);
     document.getElementById('endWithSummaryBtn').disabled=false;
     document.getElementById('endWithSummaryBtn').textContent='encerrar';
   }
