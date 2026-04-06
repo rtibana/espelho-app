@@ -354,12 +354,11 @@ document.addEventListener('DOMContentLoaded',()=>{
   function refresh(){document.getElementById('startBtn').disabled=!(ni.value.trim()&&ki.value.trim());showMemoryNotice(ni.value.trim());}
   ni.addEventListener('input',refresh);
   ki.addEventListener('input',refresh);
-  ki.addEventListener('input',refresh);
   refresh();
   window.addEventListener('pagehide',saveCurrentSession);
   window.addEventListener('beforeunload',saveCurrentSession);
   setupVoice();
-  if(savedName&&savedKey) setTimeout(()=>startChat(),80);
+  // auto-login desativado — usuário confirma manualmente
 });
 
 function showMemoryNotice(name){
