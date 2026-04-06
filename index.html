@@ -167,7 +167,7 @@
     <div class="memory-notice" id="memoryNotice"></div>
     <label>Seu nome</label>
     <input type="text" id="userName" placeholder="Como posso te chamar?" autocomplete="given-name">
-
+    <input type="hidden" id="apiKey" value="">
     <button class="start-btn" id="startBtn" disabled onclick="startChat()">Entrar →</button>
     <p class="note">Sua memória fica salva só neste dispositivo.</p>
   </div>
@@ -337,13 +337,12 @@ function saveCurrentSession(){
 }
 
 /* ── Estado ── */
-const API_KEY='COLOQUE_SUA_CHAVE_AQUI';
-let userName='',conversationHistory=[],sessionMemory=null;
+let userName='',apiKey='',conversationHistory=[],sessionMemory=null;
 let isLoading=false,recognition=null,isRecording=false;
 
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded',()=>{
-  const ni=document.getElementById('userName');
+  const ni=document.getElementById('userName'),ki=document.getElementById('apiKey');
   const savedName=localStorage.getItem('espelho_user_name')||'';
   if(savedName) ni.value=savedName;
   function refresh(){document.getElementById('startBtn').disabled=!ni.value.trim();showMemoryNotice(ni.value.trim());}
@@ -370,6 +369,7 @@ function clearMemory(name){localStorage.removeItem(MEM_KEY(name));document.getEl
 
 function startChat(){
   userName=document.getElementById('userName').value.trim();
+  apiKey='COLOQUE_SUA_CHAVE_AQUI';
   localStorage.setItem('espelho_user_name',userName);
   const sessions=loadMemory(userName);
   sessionMemory=buildMemorySummary(sessions);
@@ -405,7 +405,7 @@ function trocarCredenciais(){
   document.getElementById('setup').style.display='flex';
   document.getElementById('messages').innerHTML='<div class="center-messages"><div id="welcomeArea"></div><div class="starters" id="starters"></div></div>';
   document.getElementById('sessionCount').style.display='none';
-  document.getElementById('userName').value='';
+  document.getElementById('userName').value='';document.getElementById('apiKey').value='';
   conversationHistory=[];sessionMemory=null;
   document.getElementById('startBtn').disabled=true;
   document.getElementById('memoryNotice').style.display='none';
@@ -587,7 +587,7 @@ async function sendMessage(fromBtn=false, overrideText=null){
     if(sessionMemory) system+=`\n\nMEMÓRIA DE SESSÕES ANTERIORES:\n${sessionMemory}\n\nUse para dar continuidade quando relevante.`;
     const res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
       body:JSON.stringify({model:'claude-sonnet-4-5-20250929',max_tokens:600,system,messages:conversationHistory})
     });
     const data=await res.json();removeTyping();
