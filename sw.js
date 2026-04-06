@@ -1,4 +1,4 @@
-const CACHE = 'espelho-v2';
+const CACHE = 'espelho-v3';
 const BASE = '/espelho-app';
 const ASSETS = [
   BASE + '/',
@@ -24,11 +24,23 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Network first, fallback para cache
 self.addEventListener('fetch', e => {
-  if (e.request.url.includes('api.anthropic.com')) return;
-  if (e.request.url.includes('fonts.googleapis.com') || e.request.url.includes('fonts.gstatic.com')) return;
+  const url = e.request.url;
 
+  // Deixa passar sem interceptar: API, fontes, e requisições cross-origin
+  if (
+    url.includes('api.anthropic.com') ||
+    url.includes('fonts.googleapis.com') ||
+    url.includes('fonts.gstatic.com') ||
+    e.request.mode === 'no-cors' ||
+    !url.startsWith('https://') ||
+    !url.includes('github.io')
+  ) {
+    // Não chama e.respondWith — o browser trata normalmente
+    return;
+  }
+
+  // Apenas arquivos do próprio app passam pelo cache
   e.respondWith(
     fetch(e.request)
       .then(res => {
