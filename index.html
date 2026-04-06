@@ -167,9 +167,13 @@
     <div class="memory-notice" id="memoryNotice"></div>
     <label>Seu nome</label>
     <input type="text" id="userName" placeholder="Como posso te chamar?" autocomplete="given-name">
-    <input type="hidden" id="apiKey" value="">
+    <label>Chave da API Anthropic</label>
+    <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off">
+
     <button class="start-btn" id="startBtn" disabled onclick="startChat()">Entrar →</button>
-    <p class="note">Sua memória fica salva só neste dispositivo.</p>
+    <p class="note">Sua memória fica salva só neste dispositivo.<br>
+      <a href="https://console.anthropic.com/settings/keys" target="_blank">Obter chave gratuita →</a>
+    </p>
   </div>
 </div>
 
@@ -344,15 +348,18 @@ let isLoading=false,recognition=null,isRecording=false;
 document.addEventListener('DOMContentLoaded',()=>{
   const ni=document.getElementById('userName'),ki=document.getElementById('apiKey');
   const savedName=localStorage.getItem('espelho_user_name')||'';
+  const savedKey=localStorage.getItem('espelho_api_key')||'';
   if(savedName) ni.value=savedName;
-  function refresh(){document.getElementById('startBtn').disabled=!ni.value.trim();showMemoryNotice(ni.value.trim());}
+  if(savedKey) ki.value=savedKey;
+  function refresh(){document.getElementById('startBtn').disabled=!(ni.value.trim()&&ki.value.trim());showMemoryNotice(ni.value.trim());}
   ni.addEventListener('input',refresh);
+  ki.addEventListener('input',refresh);
   ki.addEventListener('input',refresh);
   refresh();
   window.addEventListener('pagehide',saveCurrentSession);
   window.addEventListener('beforeunload',saveCurrentSession);
   setupVoice();
-  if(savedName) setTimeout(()=>startChat(),80);
+  if(savedName&&savedKey) setTimeout(()=>startChat(),80);
 });
 
 function showMemoryNotice(name){
@@ -369,8 +376,9 @@ function clearMemory(name){localStorage.removeItem(MEM_KEY(name));document.getEl
 
 function startChat(){
   userName=document.getElementById('userName').value.trim();
-  apiKey='COLOQUE_SUA_CHAVE_AQUI';
+  apiKey=document.getElementById('apiKey').value.trim();
   localStorage.setItem('espelho_user_name',userName);
+  localStorage.setItem('espelho_api_key',apiKey);
   const sessions=loadMemory(userName);
   sessionMemory=buildMemorySummary(sessions);
   document.getElementById('setup').style.display='none';
@@ -400,12 +408,14 @@ function startChat(){
 
 function trocarCredenciais(){
   localStorage.removeItem('espelho_user_name');
+  localStorage.removeItem('espelho_api_key');
   saveCurrentSession();
   document.getElementById('chat').style.display='none';
   document.getElementById('setup').style.display='flex';
   document.getElementById('messages').innerHTML='<div class="center-messages"><div id="welcomeArea"></div><div class="starters" id="starters"></div></div>';
   document.getElementById('sessionCount').style.display='none';
-  document.getElementById('userName').value='';document.getElementById('apiKey').value='';
+  document.getElementById('userName').value='';
+  document.getElementById('apiKey').value='';
   conversationHistory=[];sessionMemory=null;
   document.getElementById('startBtn').disabled=true;
   document.getElementById('memoryNotice').style.display='none';
