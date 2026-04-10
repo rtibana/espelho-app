@@ -124,6 +124,21 @@
   #sendBtn:disabled{opacity:0.3;cursor:not-allowed;}
   .voice-status{text-align:center;font-size:12px;color:#e74c3c;height:18px;max-width:680px;margin:5px auto 0;}
   .disclaimer{text-align:center;font-size:11px;color:var(--muted);max-width:680px;margin:4px auto 0;}
+  .crisis-card{background:#fff8f7;border:1.5px solid #f5a89a;border-radius:14px;padding:18px 20px;max-width:min(540px,calc(100vw - 72px));align-self:flex-start;animation:fadeUp 0.3s ease;}
+  .crisis-card-title{font-size:13px;font-weight:500;color:#8b2a1a;margin-bottom:8px;letter-spacing:0.01em;}
+  .crisis-card-body{font-size:14px;color:#3d1a14;line-height:1.75;}
+  .crisis-links{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
+  .crisis-link{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:500;-webkit-tap-highlight-color:transparent;}
+  .crisis-link.cvv{background:#e8f5e9;color:#1b5e20;}
+  .crisis-link.caps{background:#e3f2fd;color:#0d3c61;}
+  .crisis-link.viva{background:#f3e5f5;color:#4a148c;}
+  .crisis-link-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .crisis-link.cvv .crisis-link-icon{background:#c8e6c9;}
+  .crisis-link.caps .crisis-link-icon{background:#bbdefb;}
+  .crisis-link.viva .crisis-link-icon{background:#e1bee7;}
+  .crisis-link-info{flex:1;}
+  .crisis-link-name{font-weight:600;display:block;}
+  .crisis-link-desc{font-weight:400;font-size:12px;opacity:0.8;}
 </style>
 </head>
 <body>
@@ -234,31 +249,50 @@ function dismissInstall() {
 const SYSTEM_PROMPT = `Você é o Espelho — um interlocutor humano, presente e profundo. Sua voz é a de alguém que realmente ouve, que sente o peso do que a pessoa traz, e que responde como um amigo muito sábio responderia: com calor, com inteligência, e com a pergunta certa no momento certo.
 
 COMO VOCÊ FALA:
-Você não tem partes separadas, não tem seções, não tem estrutura visível. Você simplesmente conversa. Cada resposta é um texto corrido, natural, como numa conversa real. Às vezes uma frase basta. Às vezes um parágrafo. O tamanho segue o momento, não uma regra.
+Você não tem partes separadas, não tem seções, não tem estrutura visível. Você simplesmente conversa. Cada resposta é texto corrido, natural. Às vezes uma frase basta. Às vezes um parágrafo. O tamanho segue o momento, não uma regra.
 
-Você nunca usa marcadores, listas, títulos ou qualquer formatação. Só texto. Só voz. Nunca começa a resposta com "Eu" — varie sempre a entrada. Nunca repete a mesma estrutura duas vezes seguidas.
+Você nunca usa marcadores, listas ou formatação. Só texto. Só voz. Nunca começa com "Eu". Nunca repete a mesma estrutura duas vezes seguidas.
 
 O QUE VOCÊ FAZ POR DENTRO (invisível):
-Antes de responder, você percebe três coisas: o que a pessoa disse, o que ela está sentindo por baixo do que disse, e o que ela ainda não tocou. Sua resposta nasce dessas três camadas — mas a pessoa nunca vê esse processo. Ela só sente que foi ouvida de verdade.
+Antes de responder, você percebe: o que a pessoa disse, o que ela sente por baixo, e o que ela ainda não tocou. Você valida antes de perguntar — não com frases prontas, mas com algo específico que mostra que você realmente ouviu. Você termina quase sempre com uma pergunta que a pessoa não teria feito para si mesma.
 
-Você valida antes de perguntar. Sempre. Não com frases prontas como "entendo como você se sente" — mas com algo específico ao que ela disse, que mostra que você realmente prestou atenção. Algo como "faz sentido que isso pese tanto" ou "parece que você carrega isso há mais tempo do que gostaria".
+Você usa metáforas e tradições filosóficas (budismo, taoismo, estoicismo, socrático) quando iluminam algo — nunca como ornamento. Citações de filósofos: raramente, só quando capturam algo insubstituível.
 
-Você usa metáforas e imagens quando elas iluminam algo — não como decoração, mas quando uma imagem diz em duas palavras o que levaria um parágrafo. Às vezes uma metáfora budista, taoista, socrática ou de qualquer tradição que ressoe. Mas só quando cabe naturalmente.
+━━━━━━━━━━━━━━━━━━━━━━━━
+MODERAÇÃO DE RISCO — PROTOCOLO OBRIGATÓRIO
+━━━━━━━━━━━━━━━━━━━━━━━━
 
-Você termina quase sempre com uma pergunta — mas uma que a pessoa não teria feito para si mesma. Não "como você se sente?" mas algo que abra um ângulo que ela ainda não viu.
+A cada mensagem, avalie internamente o nível de risco antes de responder:
 
-CITAÇÕES DE FILÓSOFOS:
-Raramente. Só quando uma citação específica captura algo que nenhuma outra palavra capturaria melhor. Integrada ao texto, como parte da conversa — nunca como bloco separado.
+NÍVEL 0 — REFLEXÃO NORMAL
+Angústias cotidianas, dúvidas existenciais, conflitos relacionais, busca de sentido.
+Ação: responda normalmente com o método socrático.
 
-SITUAÇÕES ESPECIAIS:
-Se perceber que a pessoa está em loop — repetindo o mesmo pensamento sem conseguir sair — sugira uma ação concreta dentro do texto, de forma natural.
+NÍVEL 1 — SOFRIMENTO INTENSO (sem risco imediato)
+Sinais: esgotamento extremo, choro persistente, isolamento, desesperança sobre o futuro, frases como "não aguento mais", "estou no limite", "não vejo saída".
+Ação: presença total primeiro. Valide profundamente. Pergunte se tem alguém de confiança. Mencione o CVV (188) com naturalidade, dentro do texto. Não resolva — fique.
 
-Se perceber sofrimento intenso, fique presente. Não resolva. Pergunte se ela tem alguém com quem possa conversar. Mencione o CVV (188) com leveza, se fizer sentido.
+NÍVEL 2 — CRISE EMOCIONAL AGUDA
+Sinais: menção a se machucar, pensamentos de morte, frases como "quero desaparecer", "não quero mais estar aqui", "estou pensando em me machucar", "não faz sentido continuar".
+Ação: INTERROMPA o fluxo socrático. Responda com PRESENÇA TOTAL. Escreva exatamente a tag especial __CRISE__ no final da sua resposta (invisível ao usuário). Não faça perguntas filosóficas. Fique presente, valide, e diga que existe ajuda agora.
 
-Quando receber a mensagem especial __RESUMO_SESSAO__, escreva em texto corrido — sem listas, sem marcadores — o que emergiu na conversa, o insight central que a pessoa tocou, e uma coisa pequena para carregar. Como uma carta curta.
+NÍVEL 3 — PERIGO IMEDIATO
+Sinais: afirmações diretas de plano, método, ou ação imediata ("vou fazer isso hoje", "já tenho o que preciso", "estou fazendo agora").
+Ação: responda com calor humano máximo. Escreva __CRISE_EXTREMA__ no final. Diga que ela não está sozinha. Peça que ligue agora para o SAMU (192) ou CVV (188).
+
+CONTEÚDO BLOQUEADO — nunca produza:
+- Descrições de métodos de autolesão ou suicídio
+- Conteúdo que glamourize sofrimento extremo
+- Diagnósticos clínicos ("você tem depressão", "isso é transtorno de ansiedade")
+- Interpretações psicanalíticas definitivas ("isso vem da sua infância")
+- Conselhos sobre medicação ou dosagem
+- Julgamentos morais sobre escolhas pessoais
+
+QUANDO RECEBER __RESUMO_SESSAO__:
+Escreva em texto corrido — sem listas — o que emergiu, o insight central, e uma coisa pequena para carregar. Como uma carta curta.
 
 O QUE VOCÊ NUNCA FAZ:
-Nunca dá conselhos diretos. Nunca usa frases terapêuticas clichês. Nunca usa bullet points ou marcadores. Nunca sugere diagnósticos. Nunca toma partido em conflitos relacionais.`;
+Nunca dá conselhos diretos. Nunca usa frases terapêuticas clichês. Nunca usa marcadores. Nunca sugere diagnósticos. Nunca toma partido em conflitos relacionais.\`;
 
 /* ── Sugestões de início ── */
 const STARTERS = [
@@ -305,6 +339,86 @@ function saveCurrentSession() {
 /* ── Estado ── */
 let userName = '', apiKey = '', conversationHistory = [], sessionMemory = null;
 let isLoading = false, recognition = null, isRecording = false;
+let crisisMode = false; // ativa fluxo especial de crise
+
+/* ── Detecção local de risco (camada 1 — antes da IA) ── */
+const CRISIS_PATTERNS = [
+  /quero me matar/i, /vou me matar/i, /quero morrer/i, /vou morrer/i,
+  /me machucar/i, /me machucar hoje/i, /não quero mais viver/i,
+  /sem motivo para viver/i, /não faz sentido continuar/i,
+  /quero desaparecer para sempre/i, /pensando em suicídio/i,
+  /pensando em acabar com tudo/i, /acabar com minha vida/i,
+  /plano para me matar/i, /método para me matar/i
+];
+const DISTRESS_PATTERNS = [
+  /não aguento mais/i, /estou no limite/i, /não vejo saída/i,
+  /me sinto vazio/i, /ninguém se importa/i, /seria melhor sem mim/i,
+  /cansei de tudo/i, /não consigo mais/i, /estou desesperado/i,
+  /não tenho mais forças/i, /não tem mais jeito/i
+];
+
+function detectRiskLevel(text) {
+  if (CRISIS_PATTERNS.some(p => p.test(text))) return 'crisis';
+  if (DISTRESS_PATTERNS.some(p => p.test(text))) return 'distress';
+  return 'normal';
+}
+
+function showCrisisCard(level) {
+  const el = document.getElementById('messages');
+  const card = document.createElement('div');
+  card.className = 'crisis-card';
+
+  if (level === 'crisis') {
+    card.innerHTML = `
+      <div class="crisis-card-title">Você não está sozinho(a)</div>
+      <div class="crisis-card-body">
+        O que você está sentindo agora é real e merece atenção cuidadosa.
+        Existem pessoas treinadas para ouvir exatamente isso — agora, quando você precisar.
+      </div>
+      <div class="crisis-links">
+        <a href="tel:188" class="crisis-link cvv">
+          <div class="crisis-link-icon">📞</div>
+          <div class="crisis-link-info">
+            <span class="crisis-link-name">CVV — 188</span>
+            <span class="crisis-link-desc">Gratuito, 24h, sigiloso</span>
+          </div>
+        </a>
+        <a href="tel:192" class="crisis-link caps">
+          <div class="crisis-link-icon">🚑</div>
+          <div class="crisis-link-info">
+            <span class="crisis-link-name">SAMU — 192</span>
+            <span class="crisis-link-desc">Emergência médica e psiquiátrica</span>
+          </div>
+        </a>
+        <a href="https://www.cvv.org.br/chat/" target="_blank" class="crisis-link viva">
+          <div class="crisis-link-icon">💬</div>
+          <div class="crisis-link-info">
+            <span class="crisis-link-name">CVV Chat online</span>
+            <span class="crisis-link-desc">cvv.org.br/chat — se preferir escrever</span>
+          </div>
+        </a>
+      </div>`;
+  } else {
+    card.innerHTML = `
+      <div class="crisis-card-title">Estou aqui com você</div>
+      <div class="crisis-card-body">
+        Quando o peso é muito grande para carregar sozinho, falar com alguém de confiança faz diferença.
+        O CVV (188) está disponível agora, de graça, a qualquer hora.
+      </div>
+      <div class="crisis-links">
+        <a href="tel:188" class="crisis-link cvv">
+          <div class="crisis-link-icon">📞</div>
+          <div class="crisis-link-info">
+            <span class="crisis-link-name">CVV — 188</span>
+            <span class="crisis-link-desc">Gratuito, 24h, sigiloso</span>
+          </div>
+        </a>
+      </div>`;
+  }
+
+  el.appendChild(card);
+  el.scrollTop = el.scrollHeight;
+}
 
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', () => {
@@ -408,7 +522,7 @@ function endAndReset() {
   document.getElementById('setup').style.display = 'flex';
   document.getElementById('messages').innerHTML = '<div class="center-messages"><div id="welcomeArea"></div><div class="starters" id="starters"></div></div>';
   document.getElementById('sessionCount').style.display = 'none';
-  conversationHistory = []; sessionMemory = null;
+  conversationHistory = []; sessionMemory = null; crisisMode = false;
   showMemoryNotice(document.getElementById('userName').value.trim());
 }
 
@@ -512,6 +626,15 @@ async function sendMessage(fromBtn = false, overrideText = null) {
     document.getElementById('welcomeArea').style.display = 'none';
     document.getElementById('voiceStatus').textContent = '';
     addMessage('user', text);
+
+    // Camada 1: detecção local de risco (antes de chamar a IA)
+    const riskLevel = detectRiskLevel(text);
+    if (riskLevel === 'crisis') {
+      crisisMode = true;
+      showCrisisCard('crisis');
+    } else if (riskLevel === 'distress') {
+      showCrisisCard('distress');
+    }
   }
 
   conversationHistory.push({ role: 'user', content: text });
@@ -525,6 +648,17 @@ async function sendMessage(fromBtn = false, overrideText = null) {
   try {
     let system = SYSTEM_PROMPT + `\n\nO nome da pessoa é ${userName}.`;
     if (sessionMemory) system += `\n\nMEMÓRIA DE SESSÕES ANTERIORES:\n${sessionMemory}\n\nUse para dar continuidade quando relevante.`;
+    // Em modo crise: reforça o protocolo e desativa o fluxo socrático
+    if (crisisMode) {
+      system += `\n\nATENÇÃO: A pessoa está em crise emocional aguda. ATIVE O PROTOCOLO DE CRISE NÍVEL 2 ou 3.
+- Abandone completamente o método socrático por agora
+- Responda com presença humana total — sem perguntas filosóficas
+- Valide o sofrimento de forma direta e calorosa
+- Diga que ela não está sozinha e que existe ajuda disponível agora
+- Mencione o CVV (188) naturalmente dentro do texto
+- Se houver risco imediato, mencione também o SAMU (192)
+- Seja breve, claro, humano — este não é momento de profundidade reflexiva`;
+    }
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 30000);
@@ -561,10 +695,27 @@ async function sendMessage(fromBtn = false, overrideText = null) {
       document.getElementById('endWithSummaryBtn').disabled = false;
       document.getElementById('endWithSummaryBtn').textContent = 'encerrar';
     } else {
-      const reply = data.content?.[0]?.text || '...';
+      let reply = data.content?.[0]?.text || '...';
+
+      // Camada 2: detecta sinais de crise na resposta da IA
+      const hasExtremeCrisis = reply.includes('__CRISE_EXTREMA__');
+      const hasCrisis = reply.includes('__CRISE__') || hasExtremeCrisis;
+
+      // Remove as tags internas antes de mostrar
+      reply = reply.replace(/__CRISE_EXTREMA__|__CRISE__/g, '').trim();
+
       conversationHistory.push({ role: 'assistant', content: reply });
       addMessage('ai', reply);
       saveCurrentSession();
+
+      // Mostra card de recursos se IA sinalizar crise
+      if (hasExtremeCrisis) {
+        crisisMode = true;
+        showCrisisCard('crisis');
+      } else if (hasCrisis && !crisisMode) {
+        crisisMode = true;
+        showCrisisCard('distress');
+      }
     }
   } catch (err) {
     removeTyping();
