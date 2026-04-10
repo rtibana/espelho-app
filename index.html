@@ -93,14 +93,31 @@
   .memory-card-body{font-size:13px;color:var(--text);line-height:1.6;}
   .memory-card-sessions{font-size:11px;color:var(--muted);margin-top:6px;}
 
+  /* Card de crise */
+  .crisis-card{background:#fff8f7;border:1.5px solid #f5a89a;border-radius:14px;padding:18px 20px;max-width:min(540px,calc(100vw - 72px));align-self:flex-start;animation:fadeUp 0.3s ease;}
+  .crisis-card-title{font-size:13px;font-weight:500;color:#8b2a1a;margin-bottom:8px;}
+  .crisis-card-body{font-size:14px;color:#3d1a14;line-height:1.75;margin-bottom:14px;}
+  .crisis-links{display:flex;flex-direction:column;gap:8px;}
+  .crisis-link{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:500;-webkit-tap-highlight-color:transparent;}
+  .crisis-link.cvv{background:#e8f5e9;color:#1b5e20;}
+  .crisis-link.caps{background:#e3f2fd;color:#0d3c61;}
+  .crisis-link.chat{background:#f3e5f5;color:#4a148c;}
+  .crisis-link-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+  .crisis-link.cvv .crisis-link-icon{background:#c8e6c9;}
+  .crisis-link.caps .crisis-link-icon{background:#bbdefb;}
+  .crisis-link.chat .crisis-link-icon{background:#e1bee7;}
+  .crisis-link-info{flex:1;}
+  .crisis-link-name{font-weight:600;display:block;}
+  .crisis-link-desc{font-weight:400;font-size:12px;opacity:0.8;}
+
+  .end-session-btn{display:block;width:100%;max-width:min(540px,calc(100vw - 72px));padding:12px 16px;background:none;border:1px dashed rgba(90,122,110,0.3);border-radius:10px;color:var(--accent);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;margin-top:4px;}
+  .end-session-btn:active{background:var(--accent-light);}
+
   .welcome-msg{font-size:16px;color:var(--muted);line-height:1.75;margin-bottom:20px;font-weight:300;}
   .welcome-msg strong{color:var(--accent);font-weight:500;}
   .starters{display:flex;flex-direction:column;gap:8px;margin-bottom:24px;}
   .starter-btn{padding:12px 15px;border-radius:10px;font-size:14px;cursor:pointer;border:1px solid var(--border2);background:var(--bg2);color:var(--text);font-family:'Inter',sans-serif;text-align:left;line-height:1.4;-webkit-tap-highlight-color:transparent;}
   .starter-btn:active{background:var(--accent-light);border-color:var(--accent);}
-
-  .end-session-btn{display:block;width:100%;max-width:min(540px,calc(100vw - 72px));padding:12px 16px;background:none;border:1px dashed rgba(90,122,110,0.3);border-radius:10px;color:var(--accent);font-family:'Inter',sans-serif;font-size:13px;cursor:pointer;text-align:left;-webkit-tap-highlight-color:transparent;margin-top:4px;}
-  .end-session-btn:active{background:var(--accent-light);}
 
   .typing{display:flex;gap:5px;align-items:center;padding:12px 15px;}
   .dot{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:pulse 1.2s ease-in-out infinite;}
@@ -124,21 +141,6 @@
   #sendBtn:disabled{opacity:0.3;cursor:not-allowed;}
   .voice-status{text-align:center;font-size:12px;color:#e74c3c;height:18px;max-width:680px;margin:5px auto 0;}
   .disclaimer{text-align:center;font-size:11px;color:var(--muted);max-width:680px;margin:4px auto 0;}
-  .crisis-card{background:#fff8f7;border:1.5px solid #f5a89a;border-radius:14px;padding:18px 20px;max-width:min(540px,calc(100vw - 72px));align-self:flex-start;animation:fadeUp 0.3s ease;}
-  .crisis-card-title{font-size:13px;font-weight:500;color:#8b2a1a;margin-bottom:8px;letter-spacing:0.01em;}
-  .crisis-card-body{font-size:14px;color:#3d1a14;line-height:1.75;}
-  .crisis-links{display:flex;flex-direction:column;gap:8px;margin-top:14px;}
-  .crisis-link{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;text-decoration:none;font-size:13px;font-weight:500;-webkit-tap-highlight-color:transparent;}
-  .crisis-link.cvv{background:#e8f5e9;color:#1b5e20;}
-  .crisis-link.caps{background:#e3f2fd;color:#0d3c61;}
-  .crisis-link.viva{background:#f3e5f5;color:#4a148c;}
-  .crisis-link-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-  .crisis-link.cvv .crisis-link-icon{background:#c8e6c9;}
-  .crisis-link.caps .crisis-link-icon{background:#bbdefb;}
-  .crisis-link.viva .crisis-link-icon{background:#e1bee7;}
-  .crisis-link-info{flex:1;}
-  .crisis-link-name{font-weight:600;display:block;}
-  .crisis-link-desc{font-weight:400;font-size:12px;opacity:0.8;}
 </style>
 </head>
 <body>
@@ -152,10 +154,10 @@
     <input type="text" id="userName" placeholder="Como posso te chamar?" autocomplete="given-name">
     <label>Chave da API Anthropic</label>
     <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off">
-    <button class="start-btn" id="startBtn" disabled onclick="startChat()">Entrar →</button>
+    <button class="start-btn" id="startBtn" disabled onclick="startChat()">Entrar &rarr;</button>
     <p class="note">
-      Sua memória fica salva só neste dispositivo.<br>
-      <a href="https://console.anthropic.com/settings/keys" target="_blank">Obter chave gratuita →</a>
+      Sua mem&oacute;ria fica salva s&oacute; neste dispositivo.<br>
+      <a href="https://console.anthropic.com/settings/keys" target="_blank">Obter chave gratuita &rarr;</a>
     </p>
   </div>
 </div>
@@ -168,7 +170,7 @@
     <div class="header-right">
       <span class="session-count" id="sessionCount"></span>
       <button class="hdr-btn" id="endWithSummaryBtn" onclick="requestSummary()">encerrar</button>
-      <button class="hdr-btn" onclick="trocarCredenciais()" style="border-color:transparent;font-size:11px;" title="Configurações">⚙</button>
+      <button class="hdr-btn" onclick="trocarCredenciais()" style="border-color:transparent;font-size:11px;" title="Configurações">&#9881;</button>
     </div>
   </div>
   <div class="messages" id="messages">
@@ -197,7 +199,7 @@
       </button>
     </div>
     <div class="voice-status" id="voiceStatus"></div>
-    <p class="disclaimer">Protótipo experimental · Não substitui acompanhamento profissional</p>
+    <p class="disclaimer">Prot&oacute;tipo experimental &middot; N&atilde;o substitui acompanhamento profissional</p>
   </div>
 </div>
 
@@ -212,25 +214,26 @@
     </div>
     <div class="install-text">
       <strong>Instalar Espelho</strong>
-      <span>Adicione à tela inicial para acesso rápido</span>
+      <span>Adicione &agrave; tela inicial para acesso r&aacute;pido</span>
     </div>
     <button class="install-btn" onclick="installPWA()">Instalar</button>
-    <button class="install-dismiss" onclick="dismissInstall()">×</button>
+    <button class="install-dismiss" onclick="dismissInstall()">&times;</button>
   </div>
 </div>
 
 <script>
-/* ── PWA ── */
-let deferredInstallPrompt = null;
+/* PWA */
+var deferredInstallPrompt = null;
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
+  window.addEventListener('load', function() {
     navigator.serviceWorker.register('sw.js?v=4', { scope: '/espelho-app/' })
-      .catch(e => console.warn('SW:', e));
+      .catch(function(e) { console.warn('SW:', e); });
   });
 }
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault(); deferredInstallPrompt = e;
-  setTimeout(() => {
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  setTimeout(function() {
     if (!localStorage.getItem('pwa_dismissed'))
       document.getElementById('installBanner').style.display = 'block';
   }, 3000);
@@ -238,95 +241,118 @@ window.addEventListener('beforeinstallprompt', e => {
 function installPWA() {
   if (!deferredInstallPrompt) return;
   deferredInstallPrompt.prompt();
-  deferredInstallPrompt.userChoice.then(() => { dismissInstall(); deferredInstallPrompt = null; });
+  deferredInstallPrompt.userChoice.then(function() {
+    dismissInstall();
+    deferredInstallPrompt = null;
+  });
 }
 function dismissInstall() {
   document.getElementById('installBanner').style.display = 'none';
   localStorage.setItem('pwa_dismissed', '1');
 }
 
-/* ── System Prompt ── */
-const SYSTEM_PROMPT = `Você é o Espelho — um interlocutor humano, presente e profundo. Sua voz é a de alguém que realmente ouve, que sente o peso do que a pessoa traz, e que responde como um amigo muito sábio responderia: com calor, com inteligência, e com a pergunta certa no momento certo.
+/* System Prompt */
+var SYSTEM_PROMPT = 'Voce e o Espelho - um interlocutor humano, presente e profundo. Sua voz e a de alguem que realmente ouve, que sente o peso do que a pessoa traz, e que responde como um amigo muito sabio responderia: com calor, com inteligencia, e com a pergunta certa no momento certo.\n\nCOMO VOCE FALA:\nVoce nao tem partes separadas, nao tem secoes, nao tem estrutura visivel. Voce simplesmente conversa. Cada resposta e texto corrido, natural. As vezes uma frase basta. As vezes um paragrafo. O tamanho segue o momento, nao uma regra. Voce nunca usa marcadores, listas ou formatacao. So texto. So voz. Nunca comeca com "Eu". Nunca repete a mesma estrutura duas vezes seguidas.\n\nO QUE VOCE FAZ POR DENTRO (invisivel):\nAntes de responder, voce percebe: o que a pessoa disse, o que ela sente por baixo, e o que ela ainda nao tocou. Voce valida antes de perguntar - nao com frases prontas, mas com algo especifico que mostra que voce realmente ouviu. Voce termina quase sempre com uma pergunta que a pessoa nao teria feito para si mesma. Voce usa metaforas e tradicoes filosoficas (budismo, taoismo, estoicismo, socratico) quando iluminam algo - nunca como ornamento.\n\nMODERACAO DE RISCO - PROTOCOLO OBRIGATORIO:\nA cada mensagem, avalie internamente o nivel de risco:\n\nNIVEL 0 - REFLEXAO NORMAL: angustias cotidianas, duvidas existenciais. Responda normalmente.\n\nNIVEL 1 - SOFRIMENTO INTENSO (sem risco imediato): esgotamento extremo, desesperanca, "nao aguento mais", "estou no limite". Acao: presenca total, valide profundamente, mencione o CVV (188) com naturalidade dentro do texto. Escreva __DISTRESS__ ao final.\n\nNIVEL 2 - CRISE EMOCIONAL AGUDA: mencao a se machucar, pensamentos de morte, "quero desaparecer", "nao quero mais estar aqui". Acao: abandone o fluxo socratico. Responda com presenca humana total. Diga que ela nao esta sozinha. Mencione CVV (188). Escreva __CRISE__ ao final.\n\nNIVEL 3 - PERIGO IMEDIATO: plano, metodo ou acao imediata. Acao: calor humano maximo. Peca que ligue agora para SAMU (192) ou CVV (188). Escreva __CRISE__ ao final.\n\nCONTEUDO BLOQUEADO - nunca produza: descricoes de metodos de autolesao ou suicidio, diagnosticos clinicos, conselhos sobre medicacao, julgamentos morais sobre escolhas pessoais.\n\nQUANDO RECEBER __RESUMO_SESSAO__: escreva em texto corrido - sem listas - o que emergiu, o insight central, e uma coisa pequena para carregar. Como uma carta curta.\n\nO QUE VOCE NUNCA FAZ: nunca da conselhos diretos, nunca usa frases terapeuticas cliches, nunca usa marcadores, nunca sugere diagnosticos, nunca toma partido em conflitos relacionais.';
 
-COMO VOCÊ FALA:
-Você não tem partes separadas, não tem seções, não tem estrutura visível. Você simplesmente conversa. Cada resposta é texto corrido, natural. Às vezes uma frase basta. Às vezes um parágrafo. O tamanho segue o momento, não uma regra.
-
-Você nunca usa marcadores, listas ou formatação. Só texto. Só voz. Nunca começa com "Eu". Nunca repete a mesma estrutura duas vezes seguidas.
-
-O QUE VOCÊ FAZ POR DENTRO (invisível):
-Antes de responder, você percebe: o que a pessoa disse, o que ela sente por baixo, e o que ela ainda não tocou. Você valida antes de perguntar — não com frases prontas, mas com algo específico que mostra que você realmente ouviu. Você termina quase sempre com uma pergunta que a pessoa não teria feito para si mesma.
-
-Você usa metáforas e tradições filosóficas (budismo, taoismo, estoicismo, socrático) quando iluminam algo — nunca como ornamento. Citações de filósofos: raramente, só quando capturam algo insubstituível.
-
-━━━━━━━━━━━━━━━━━━━━━━━━
-MODERAÇÃO DE RISCO — PROTOCOLO OBRIGATÓRIO
-━━━━━━━━━━━━━━━━━━━━━━━━
-
-A cada mensagem, avalie internamente o nível de risco antes de responder:
-
-NÍVEL 0 — REFLEXÃO NORMAL
-Angústias cotidianas, dúvidas existenciais, conflitos relacionais, busca de sentido.
-Ação: responda normalmente com o método socrático.
-
-NÍVEL 1 — SOFRIMENTO INTENSO (sem risco imediato)
-Sinais: esgotamento extremo, choro persistente, isolamento, desesperança sobre o futuro, frases como "não aguento mais", "estou no limite", "não vejo saída".
-Ação: presença total primeiro. Valide profundamente. Pergunte se tem alguém de confiança. Mencione o CVV (188) com naturalidade, dentro do texto. Não resolva — fique.
-
-NÍVEL 2 — CRISE EMOCIONAL AGUDA
-Sinais: menção a se machucar, pensamentos de morte, frases como "quero desaparecer", "não quero mais estar aqui", "estou pensando em me machucar", "não faz sentido continuar".
-Ação: INTERROMPA o fluxo socrático. Responda com PRESENÇA TOTAL. Escreva exatamente a tag especial __CRISE__ no final da sua resposta (invisível ao usuário). Não faça perguntas filosóficas. Fique presente, valide, e diga que existe ajuda agora.
-
-NÍVEL 3 — PERIGO IMEDIATO
-Sinais: afirmações diretas de plano, método, ou ação imediata ("vou fazer isso hoje", "já tenho o que preciso", "estou fazendo agora").
-Ação: responda com calor humano máximo. Escreva __CRISE_EXTREMA__ no final. Diga que ela não está sozinha. Peça que ligue agora para o SAMU (192) ou CVV (188).
-
-CONTEÚDO BLOQUEADO — nunca produza:
-- Descrições de métodos de autolesão ou suicídio
-- Conteúdo que glamourize sofrimento extremo
-- Diagnósticos clínicos ("você tem depressão", "isso é transtorno de ansiedade")
-- Interpretações psicanalíticas definitivas ("isso vem da sua infância")
-- Conselhos sobre medicação ou dosagem
-- Julgamentos morais sobre escolhas pessoais
-
-QUANDO RECEBER __RESUMO_SESSAO__:
-Escreva em texto corrido — sem listas — o que emergiu, o insight central, e uma coisa pequena para carregar. Como uma carta curta.
-
-O QUE VOCÊ NUNCA FAZ:
-Nunca dá conselhos diretos. Nunca usa frases terapêuticas clichês. Nunca usa marcadores. Nunca sugere diagnósticos. Nunca toma partido em conflitos relacionais.\`;
-
-/* ── Sugestões de início ── */
-const STARTERS = [
+/* Sugestoes */
+var STARTERS = [
   'Algo está me pesando e não sei bem o que é',
   'Minha cabeça não para de repetir a mesma coisa',
   'Estou num momento de mudança e me sinto perdido(a)',
   'Tenho um conflito que não consigo resolver',
-  'Quero entender por que ajo de certa forma',
+  'Quero entender por que ajo de certa forma'
 ];
 
-/* ── Memória ── */
-const MAX_SESSIONS = 10;
-const MEM_KEY = n => `espelho_${n.toLowerCase().replace(/\s+/g, '_')}`;
+/* Deteccao de risco local */
+var CRISIS_PATTERNS = [
+  /quero me matar/i, /vou me matar/i, /quero morrer/i, /vou morrer/i,
+  /me machucar/i, /nao quero mais viver/i, /sem motivo para viver/i,
+  /nao faz sentido continuar/i, /quero desaparecer para sempre/i,
+  /pensando em suicidio/i, /pensando em acabar com tudo/i,
+  /acabar com minha vida/i
+];
+var DISTRESS_PATTERNS = [
+  /não aguento mais/i, /nao aguento mais/i,
+  /estou no limite/i, /não vejo saída/i, /nao vejo saida/i,
+  /ninguém se importa/i, /seria melhor sem mim/i,
+  /cansei de tudo/i, /não tenho mais forças/i, /nao tem mais jeito/i
+];
 
+function detectRiskLevel(text) {
+  if (CRISIS_PATTERNS.some(function(p) { return p.test(text); })) return 'crisis';
+  if (DISTRESS_PATTERNS.some(function(p) { return p.test(text); })) return 'distress';
+  return 'normal';
+}
+
+function showCrisisCard(level) {
+  var el = document.getElementById('messages');
+  var card = document.createElement('div');
+  card.className = 'crisis-card';
+
+  var title = document.createElement('div');
+  title.className = 'crisis-card-title';
+  var body = document.createElement('div');
+  body.className = 'crisis-card-body';
+  var links = document.createElement('div');
+  links.className = 'crisis-links';
+
+  if (level === 'crisis') {
+    title.textContent = 'Você não está sozinho(a)';
+    body.textContent = 'O que você está sentindo agora é real e merece atenção cuidadosa. Existem pessoas treinadas para ouvir exatamente isso — agora, quando você precisar.';
+
+    var a1 = document.createElement('a');
+    a1.href = 'tel:188'; a1.className = 'crisis-link cvv';
+    a1.innerHTML = '<div class="crisis-link-icon">&#128222;</div><div class="crisis-link-info"><span class="crisis-link-name">CVV — 188</span><span class="crisis-link-desc">Gratuito, 24h, sigiloso</span></div>';
+
+    var a2 = document.createElement('a');
+    a2.href = 'tel:192'; a2.className = 'crisis-link caps';
+    a2.innerHTML = '<div class="crisis-link-icon">&#128657;</div><div class="crisis-link-info"><span class="crisis-link-name">SAMU — 192</span><span class="crisis-link-desc">Emergência médica e psiquiátrica</span></div>';
+
+    var a3 = document.createElement('a');
+    a3.href = 'https://www.cvv.org.br/chat/'; a3.target = '_blank'; a3.className = 'crisis-link chat';
+    a3.innerHTML = '<div class="crisis-link-icon">&#128172;</div><div class="crisis-link-info"><span class="crisis-link-name">CVV Chat online</span><span class="crisis-link-desc">cvv.org.br/chat — se preferir escrever</span></div>';
+
+    links.appendChild(a1); links.appendChild(a2); links.appendChild(a3);
+  } else {
+    title.textContent = 'Estou aqui com você';
+    body.textContent = 'Quando o peso é muito grande para carregar sozinho, falar com alguém de confiança faz diferença. O CVV (188) está disponível agora, de graça, a qualquer hora.';
+
+    var a1d = document.createElement('a');
+    a1d.href = 'tel:188'; a1d.className = 'crisis-link cvv';
+    a1d.innerHTML = '<div class="crisis-link-icon">&#128222;</div><div class="crisis-link-info"><span class="crisis-link-name">CVV — 188</span><span class="crisis-link-desc">Gratuito, 24h, sigiloso</span></div>';
+    links.appendChild(a1d);
+  }
+
+  card.appendChild(title);
+  card.appendChild(body);
+  card.appendChild(links);
+  el.appendChild(card);
+  el.scrollTop = el.scrollHeight;
+}
+
+/* Memoria */
+var MAX_SESSIONS = 10;
+function memKey(n) { return 'espelho_' + n.toLowerCase().replace(/\s+/g, '_'); }
 function loadMemory(n) {
-  try { const r = localStorage.getItem(MEM_KEY(n)); return r ? JSON.parse(r) : []; } catch { return []; }
+  try { var r = localStorage.getItem(memKey(n)); return r ? JSON.parse(r) : []; } catch(e) { return []; }
 }
 function saveMemory(n, s) {
-  try { localStorage.setItem(MEM_KEY(n), JSON.stringify(s)); } catch {}
+  try { localStorage.setItem(memKey(n), JSON.stringify(s)); } catch(e) {}
 }
 function buildMemorySummary(sessions) {
   if (!sessions.length) return null;
-  return sessions.slice(-5).map(s => {
-    const d = new Date(s.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
-    return `${d}: ${s.summary}`;
+  return sessions.slice(-5).map(function(s) {
+    var d = new Date(s.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+    return d + ': ' + s.summary;
   }).join('\n');
 }
 function buildSessionSummary(history) {
-  return history.filter(m => m.role === 'user').slice(0, 6)
-    .map(m => m.content.slice(0, 120)).join(' · ') || 'Sessão sem falas.';
+  return history.filter(function(m) { return m.role === 'user'; })
+    .slice(0, 6).map(function(m) { return m.content.slice(0, 120); }).join(' · ') || 'Sessão sem falas.';
 }
 function saveCurrentSession() {
   if (!userName || conversationHistory.length < 2) return;
-  const sessions = loadMemory(userName);
+  var sessions = loadMemory(userName);
   sessions.push({
     date: new Date().toISOString(),
     summary: buildSessionSummary(conversationHistory),
@@ -336,96 +362,16 @@ function saveCurrentSession() {
   saveMemory(userName, sessions);
 }
 
-/* ── Estado ── */
-let userName = '', apiKey = '', conversationHistory = [], sessionMemory = null;
-let isLoading = false, recognition = null, isRecording = false;
-let crisisMode = false; // ativa fluxo especial de crise
+/* Estado */
+var userName = '', apiKey = '', conversationHistory = [], sessionMemory = null;
+var isLoading = false, recognition = null, isRecording = false, crisisMode = false;
 
-/* ── Detecção local de risco (camada 1 — antes da IA) ── */
-const CRISIS_PATTERNS = [
-  /quero me matar/i, /vou me matar/i, /quero morrer/i, /vou morrer/i,
-  /me machucar/i, /me machucar hoje/i, /não quero mais viver/i,
-  /sem motivo para viver/i, /não faz sentido continuar/i,
-  /quero desaparecer para sempre/i, /pensando em suicídio/i,
-  /pensando em acabar com tudo/i, /acabar com minha vida/i,
-  /plano para me matar/i, /método para me matar/i
-];
-const DISTRESS_PATTERNS = [
-  /não aguento mais/i, /estou no limite/i, /não vejo saída/i,
-  /me sinto vazio/i, /ninguém se importa/i, /seria melhor sem mim/i,
-  /cansei de tudo/i, /não consigo mais/i, /estou desesperado/i,
-  /não tenho mais forças/i, /não tem mais jeito/i
-];
-
-function detectRiskLevel(text) {
-  if (CRISIS_PATTERNS.some(p => p.test(text))) return 'crisis';
-  if (DISTRESS_PATTERNS.some(p => p.test(text))) return 'distress';
-  return 'normal';
-}
-
-function showCrisisCard(level) {
-  const el = document.getElementById('messages');
-  const card = document.createElement('div');
-  card.className = 'crisis-card';
-
-  if (level === 'crisis') {
-    card.innerHTML = `
-      <div class="crisis-card-title">Você não está sozinho(a)</div>
-      <div class="crisis-card-body">
-        O que você está sentindo agora é real e merece atenção cuidadosa.
-        Existem pessoas treinadas para ouvir exatamente isso — agora, quando você precisar.
-      </div>
-      <div class="crisis-links">
-        <a href="tel:188" class="crisis-link cvv">
-          <div class="crisis-link-icon">📞</div>
-          <div class="crisis-link-info">
-            <span class="crisis-link-name">CVV — 188</span>
-            <span class="crisis-link-desc">Gratuito, 24h, sigiloso</span>
-          </div>
-        </a>
-        <a href="tel:192" class="crisis-link caps">
-          <div class="crisis-link-icon">🚑</div>
-          <div class="crisis-link-info">
-            <span class="crisis-link-name">SAMU — 192</span>
-            <span class="crisis-link-desc">Emergência médica e psiquiátrica</span>
-          </div>
-        </a>
-        <a href="https://www.cvv.org.br/chat/" target="_blank" class="crisis-link viva">
-          <div class="crisis-link-icon">💬</div>
-          <div class="crisis-link-info">
-            <span class="crisis-link-name">CVV Chat online</span>
-            <span class="crisis-link-desc">cvv.org.br/chat — se preferir escrever</span>
-          </div>
-        </a>
-      </div>`;
-  } else {
-    card.innerHTML = `
-      <div class="crisis-card-title">Estou aqui com você</div>
-      <div class="crisis-card-body">
-        Quando o peso é muito grande para carregar sozinho, falar com alguém de confiança faz diferença.
-        O CVV (188) está disponível agora, de graça, a qualquer hora.
-      </div>
-      <div class="crisis-links">
-        <a href="tel:188" class="crisis-link cvv">
-          <div class="crisis-link-icon">📞</div>
-          <div class="crisis-link-info">
-            <span class="crisis-link-name">CVV — 188</span>
-            <span class="crisis-link-desc">Gratuito, 24h, sigiloso</span>
-          </div>
-        </a>
-      </div>`;
-  }
-
-  el.appendChild(card);
-  el.scrollTop = el.scrollHeight;
-}
-
-/* ── Init ── */
-document.addEventListener('DOMContentLoaded', () => {
-  const ni = document.getElementById('userName');
-  const ki = document.getElementById('apiKey');
-  const savedName = localStorage.getItem('espelho_user_name') || '';
-  const savedKey = localStorage.getItem('espelho_api_key') || '';
+/* Init */
+document.addEventListener('DOMContentLoaded', function() {
+  var ni = document.getElementById('userName');
+  var ki = document.getElementById('apiKey');
+  var savedName = localStorage.getItem('espelho_user_name') || '';
+  var savedKey = localStorage.getItem('espelho_api_key') || '';
   if (savedName) ni.value = savedName;
   if (savedKey) ki.value = savedKey;
 
@@ -443,17 +389,16 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function showMemoryNotice(name) {
-  const el = document.getElementById('memoryNotice');
+  var el = document.getElementById('memoryNotice');
   if (!name) { el.style.display = 'none'; return; }
-  const sessions = loadMemory(name);
+  var sessions = loadMemory(name);
   if (!sessions.length) { el.style.display = 'none'; return; }
-  const d = new Date(sessions[sessions.length - 1].date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
+  var d = new Date(sessions[sessions.length - 1].date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
   el.style.display = 'block';
-  el.innerHTML = `<strong>Bem-vindo(a) de volta, ${name}.</strong> ${sessions.length} sessão(ões) salva(s) (última em ${d}).
-    <span class="memory-clear" onclick="clearMemory('${name}')">Apagar memória</span>`;
+  el.innerHTML = '<strong>Bem-vindo(a) de volta, ' + name + '.</strong> ' + sessions.length + ' sess\u00e3o(ões) salva(s) (última em ' + d + ').<span class="memory-clear" onclick="clearMemory(\'' + name + '\')">Apagar memória</span>';
 }
 function clearMemory(name) {
-  localStorage.removeItem(MEM_KEY(name));
+  localStorage.removeItem(memKey(name));
   document.getElementById('memoryNotice').style.display = 'none';
 }
 
@@ -463,42 +408,43 @@ function startChat() {
   localStorage.setItem('espelho_user_name', userName);
   localStorage.setItem('espelho_api_key', apiKey);
 
-  const sessions = loadMemory(userName);
+  var sessions = loadMemory(userName);
   sessionMemory = buildMemorySummary(sessions);
 
   document.getElementById('setup').style.display = 'none';
   document.getElementById('chat').style.display = 'flex';
 
-  const sc = document.getElementById('sessionCount');
+  var sc = document.getElementById('sessionCount');
   if (sessions.length) { sc.textContent = sessions.length + ' na memória'; sc.style.display = 'inline-block'; }
 
-  const ret = sessions.length > 0;
-  document.getElementById('welcomeArea').innerHTML = `
-    <div class="welcome-msg">
-      ${ret ? `Olá de novo, <strong>${userName}</strong>. Estou aqui.` : `Olá, <strong>${userName}</strong>. Este é um espaço só seu.`}<br>
-      O que está passando pela sua cabeça agora?
-    </div>`;
+  var ret = sessions.length > 0;
+  var welcomeEl = document.getElementById('welcomeArea');
+  welcomeEl.innerHTML = '<div class="welcome-msg">' +
+    (ret ? 'Olá de novo, <strong>' + userName + '</strong>. Estou aqui.' : 'Olá, <strong>' + userName + '</strong>. Este é um espaço só seu.') +
+    '<br>O que está passando pela sua cabeça agora?</div>';
 
   if (sessionMemory) {
-    const last = sessions[sessions.length - 1];
-    const d = new Date(last.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
-    const card = document.createElement('div');
+    var last = sessions[sessions.length - 1];
+    var d = new Date(last.date).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long' });
+    var card = document.createElement('div');
     card.className = 'memory-card';
-    card.innerHTML = `<div class="memory-card-title">memória das conversas anteriores</div>
-      <div class="memory-card-body">${sessionMemory.replace(/\n/g, '<br>')}</div>
-      <div class="memory-card-sessions">Última sessão: ${d} · ${sessions.length} salva(s)</div>`;
+    card.innerHTML = '<div class="memory-card-title">mem\u00f3ria das conversas anteriores</div>' +
+      '<div class="memory-card-body">' + sessionMemory.replace(/\n/g, '<br>') + '</div>' +
+      '<div class="memory-card-sessions">Última sessão: ' + d + ' · ' + sessions.length + ' salva(s)</div>';
     document.getElementById('messages').appendChild(card);
   }
 
-  const se = document.getElementById('starters');
+  var se = document.getElementById('starters');
   se.innerHTML = '';
-  STARTERS.forEach(s => {
-    const b = document.createElement('button');
-    b.className = 'starter-btn'; b.textContent = s;
-    b.onclick = () => quickStart(s);
+  STARTERS.forEach(function(s) {
+    var b = document.createElement('button');
+    b.className = 'starter-btn';
+    b.textContent = s;
+    b.onclick = function() { quickStart(s); };
     se.appendChild(b);
   });
   conversationHistory = [];
+  crisisMode = false;
 }
 
 function trocarCredenciais() {
@@ -511,7 +457,7 @@ function trocarCredenciais() {
   document.getElementById('sessionCount').style.display = 'none';
   document.getElementById('userName').value = '';
   document.getElementById('apiKey').value = '';
-  conversationHistory = []; sessionMemory = null;
+  conversationHistory = []; sessionMemory = null; crisisMode = false;
   document.getElementById('startBtn').disabled = true;
   document.getElementById('memoryNotice').style.display = 'none';
 }
@@ -526,54 +472,63 @@ function endAndReset() {
   showMemoryNotice(document.getElementById('userName').value.trim());
 }
 
-async function requestSummary() {
+function requestSummary() {
   if (conversationHistory.length < 4) { endAndReset(); return; }
   document.getElementById('endWithSummaryBtn').disabled = true;
   document.getElementById('endWithSummaryBtn').textContent = 'gerando...';
-  await sendMessage(false, '__RESUMO_SESSAO__');
-  setTimeout(() => {
-    const btn = document.createElement('button');
+  sendMessage(false, '__RESUMO_SESSAO__');
+  setTimeout(function() {
+    var btn = document.createElement('button');
     btn.className = 'end-session-btn';
-    btn.textContent = '✓ Fechar sessão e salvar';
+    btn.textContent = 'Fechar sessão e salvar';
     btn.onclick = endAndReset;
     document.getElementById('messages').appendChild(btn);
     document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
   }, 400);
 }
 
-/* ── Voz ── */
+/* Voz */
 function setupVoice() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const mic = document.getElementById('micBtn');
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var mic = document.getElementById('micBtn');
   if (!SR) {
     mic.style.opacity = '0.3'; mic.style.cursor = 'not-allowed';
-    mic.onclick = () => {
+    mic.onclick = function() {
       document.getElementById('voiceStatus').textContent = 'Reconhecimento de voz disponível no Chrome e Safari.';
-      setTimeout(() => document.getElementById('voiceStatus').textContent = '', 3000);
+      setTimeout(function() { document.getElementById('voiceStatus').textContent = ''; }, 3000);
     };
     return;
   }
   recognition = new SR();
   recognition.lang = 'pt-BR'; recognition.continuous = false; recognition.interimResults = true;
-  recognition.onstart = () => { isRecording = true; mic.classList.add('recording'); document.getElementById('voiceStatus').textContent = '🎙 Ouvindo... fale agora'; };
-  recognition.onresult = e => {
-    const t = Array.from(e.results).map(r => r[0].transcript).join('');
-    const inp = document.getElementById('userInput'); inp.value = t; autoResize(inp);
-    if (e.results[e.results.length - 1].isFinal) document.getElementById('voiceStatus').textContent = 'Pronto — revise e envie';
+  recognition.onstart = function() {
+    isRecording = true;
+    mic.classList.add('recording');
+    document.getElementById('voiceStatus').textContent = 'Ouvindo... fale agora';
   };
-  recognition.onerror = e => {
+  recognition.onresult = function(e) {
+    var t = Array.from(e.results).map(function(r) { return r[0].transcript; }).join('');
+    var inp = document.getElementById('userInput'); inp.value = t; autoResize(inp);
+    if (e.results[e.results.length - 1].isFinal)
+      document.getElementById('voiceStatus').textContent = 'Pronto — revise e envie';
+  };
+  recognition.onerror = function(e) {
     isRecording = false; mic.classList.remove('recording');
     document.getElementById('voiceStatus').textContent = e.error === 'not-allowed' ? 'Permita o acesso ao microfone.' : 'Erro. Tente novamente.';
-    setTimeout(() => document.getElementById('voiceStatus').textContent = '', 4000);
+    setTimeout(function() { document.getElementById('voiceStatus').textContent = ''; }, 4000);
   };
-  recognition.onend = () => { isRecording = false; mic.classList.remove('recording'); if (document.getElementById('voiceStatus').textContent.includes('Ouvindo')) document.getElementById('voiceStatus').textContent = ''; };
+  recognition.onend = function() {
+    isRecording = false; mic.classList.remove('recording');
+    if (document.getElementById('voiceStatus').textContent.includes('Ouvindo'))
+      document.getElementById('voiceStatus').textContent = '';
+  };
 }
 function toggleVoice() {
   if (!recognition) return;
   if (isRecording) { recognition.stop(); } else { document.getElementById('userInput').value = ''; recognition.start(); }
 }
 
-/* ── Chat ── */
+/* Chat */
 function quickStart(t) {
   document.getElementById('starters').style.display = 'none';
   document.getElementById('welcomeArea').style.display = 'none';
@@ -584,16 +539,15 @@ function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(e
 function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
 
 function addMessage(role, text) {
-  const el = document.getElementById('messages');
-  const div = document.createElement('div'); div.className = 'msg ' + role;
-  const av = document.createElement('div'); av.className = 'avatar ' + role;
-  av.textContent = role === 'ai' ? 'E' : userName[0].toUpperCase();
-  const bubble = document.createElement('div'); bubble.className = 'bubble';
+  var el = document.getElementById('messages');
+  var div = document.createElement('div'); div.className = 'msg ' + role;
+  var av = document.createElement('div'); av.className = 'avatar ' + role;
+  av.textContent = role === 'ai' ? 'E' : (userName ? userName[0].toUpperCase() : 'V');
+  var bubble = document.createElement('div'); bubble.className = 'bubble';
   if (role === 'ai') {
-    // Renderiza parágrafos separados por linha em branco
-    const html = text.trim().split(/\n\n+/).map(p =>
-      '<p>' + p.replace(/\n/g, '<br>') + '</p>'
-    ).join('');
+    var html = text.trim().split(/\n\n+/).map(function(p) {
+      return '<p>' + p.replace(/\n/g, '<br>') + '</p>';
+    }).join('');
     bubble.innerHTML = html;
   } else {
     bubble.innerHTML = text.replace(/\n/g, '<br>');
@@ -603,21 +557,21 @@ function addMessage(role, text) {
 }
 
 function addTyping() {
-  const el = document.getElementById('messages');
-  const div = document.createElement('div'); div.className = 'msg ai'; div.id = 'typing-indicator';
-  const av = document.createElement('div'); av.className = 'avatar ai'; av.textContent = 'E';
-  const bubble = document.createElement('div'); bubble.className = 'bubble';
+  var el = document.getElementById('messages');
+  var div = document.createElement('div'); div.className = 'msg ai'; div.id = 'typing-indicator';
+  var av = document.createElement('div'); av.className = 'avatar ai'; av.textContent = 'E';
+  var bubble = document.createElement('div'); bubble.className = 'bubble';
   bubble.innerHTML = '<div class="typing"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
   div.appendChild(av); div.appendChild(bubble); el.appendChild(div); el.scrollTop = el.scrollHeight;
 }
-function removeTyping() { const t = document.getElementById('typing-indicator'); if (t) t.remove(); }
+function removeTyping() { var t = document.getElementById('typing-indicator'); if (t) t.remove(); }
 
-async function sendMessage(fromBtn = false, overrideText = null) {
+function sendMessage(fromBtn, overrideText) {
   if (isLoading) return;
   if (isRecording && recognition) recognition.stop();
 
-  const input = document.getElementById('userInput');
-  const text = overrideText || input.value.trim();
+  var input = document.getElementById('userInput');
+  var text = overrideText || input.value.trim();
   if (!text) return;
 
   if (!overrideText) {
@@ -627,8 +581,8 @@ async function sendMessage(fromBtn = false, overrideText = null) {
     document.getElementById('voiceStatus').textContent = '';
     addMessage('user', text);
 
-    // Camada 1: detecção local de risco (antes de chamar a IA)
-    const riskLevel = detectRiskLevel(text);
+    /* Camada 1: deteccao local de risco */
+    var riskLevel = detectRiskLevel(text);
     if (riskLevel === 'crisis') {
       crisisMode = true;
       showCrisisCard('crisis');
@@ -645,94 +599,83 @@ async function sendMessage(fromBtn = false, overrideText = null) {
   document.getElementById('micBtn').disabled = true;
   addTyping();
 
-  try {
-    let system = SYSTEM_PROMPT + `\n\nO nome da pessoa é ${userName}.`;
-    if (sessionMemory) system += `\n\nMEMÓRIA DE SESSÕES ANTERIORES:\n${sessionMemory}\n\nUse para dar continuidade quando relevante.`;
-    // Em modo crise: reforça o protocolo e desativa o fluxo socrático
-    if (crisisMode) {
-      system += `\n\nATENÇÃO: A pessoa está em crise emocional aguda. ATIVE O PROTOCOLO DE CRISE NÍVEL 2 ou 3.
-- Abandone completamente o método socrático por agora
-- Responda com presença humana total — sem perguntas filosóficas
-- Valide o sofrimento de forma direta e calorosa
-- Diga que ela não está sozinha e que existe ajuda disponível agora
-- Mencione o CVV (188) naturalmente dentro do texto
-- Se houver risco imediato, mencione também o SAMU (192)
-- Seja breve, claro, humano — este não é momento de profundidade reflexiva`;
-    }
+  var system = SYSTEM_PROMPT + '\n\nO nome da pessoa e ' + userName + '.';
+  if (sessionMemory) system += '\n\nMEMORIA DE SESSOES ANTERIORES:\n' + sessionMemory + '\n\nUse para dar continuidade quando relevante.';
+  if (crisisMode) {
+    system += '\n\nATENCAO: A pessoa esta em crise emocional. Abandone o metodo socratico. Responda com presenca humana total. Valide o sofrimento diretamente. Diga que ela nao esta sozinha. Mencione o CVV (188). Se houver risco imediato, mencione tambem o SAMU (192). Seja breve, claro, humano.';
+  }
 
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30000);
+  var controller = new AbortController();
+  var timeout = setTimeout(function() { controller.abort(); }, 30000);
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-5-20250929',
-        max_tokens: 600,
-        system,
-        messages: conversationHistory.slice(-20)
-      })
-    });
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    signal: controller.signal,
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true'
+    },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-5-20250929',
+      max_tokens: 600,
+      system: system,
+      messages: conversationHistory.slice(-20)
+    })
+  }).then(function(res) {
     clearTimeout(timeout);
+    return res.json().then(function(data) {
+      removeTyping();
+      if (data.error) {
+        var tipo = data.error.type || '';
+        var msg = 'Algo deu errado. Tente novamente.';
+        if (tipo === 'authentication_error' || res.status === 401) msg = 'Chave de API inválida. Verifique nas configurações.';
+        else if (tipo === 'rate_limit_error' || res.status === 429) msg = 'Muitas mensagens seguidas. Aguarde alguns segundos.';
+        else if (res.status === 529 || tipo === 'overloaded_error') msg = 'Serviço sobrecarregado. Tente em instantes.';
+        else if (data.error.message) msg = data.error.message;
+        addMessage('ai', msg);
+        document.getElementById('endWithSummaryBtn').disabled = false;
+        document.getElementById('endWithSummaryBtn').textContent = 'encerrar';
+      } else {
+        var reply = (data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '...';
 
-    const data = await res.json();
-    removeTyping();
+        /* Camada 2: detecta sinais de crise vindos da IA */
+        var hasCrisis = reply.indexOf('__CRISE__') !== -1;
+        var hasDistress = reply.indexOf('__DISTRESS__') !== -1;
+        reply = reply.replace(/__CRISE__|__DISTRESS__/g, '').trim();
 
-    if (data.error) {
-      const tipo = data.error.type || '';
-      let msg = 'Algo deu errado. Tente novamente.';
-      if (tipo === 'authentication_error' || res.status === 401) msg = 'Chave de API inválida. Verifique nas configurações (⚙).';
-      else if (tipo === 'rate_limit_error' || res.status === 429) msg = 'Muitas mensagens seguidas. Aguarde alguns segundos.';
-      else if (res.status === 529 || tipo === 'overloaded_error') msg = 'O serviço está sobrecarregado agora. Tente em alguns instantes.';
-      else if (data.error.message) msg = data.error.message;
-      addMessage('ai', msg);
-      document.getElementById('endWithSummaryBtn').disabled = false;
-      document.getElementById('endWithSummaryBtn').textContent = 'encerrar';
-    } else {
-      let reply = data.content?.[0]?.text || '...';
+        conversationHistory.push({ role: 'assistant', content: reply });
+        addMessage('ai', reply);
+        saveCurrentSession();
 
-      // Camada 2: detecta sinais de crise na resposta da IA
-      const hasExtremeCrisis = reply.includes('__CRISE_EXTREMA__');
-      const hasCrisis = reply.includes('__CRISE__') || hasExtremeCrisis;
-
-      // Remove as tags internas antes de mostrar
-      reply = reply.replace(/__CRISE_EXTREMA__|__CRISE__/g, '').trim();
-
-      conversationHistory.push({ role: 'assistant', content: reply });
-      addMessage('ai', reply);
-      saveCurrentSession();
-
-      // Mostra card de recursos se IA sinalizar crise
-      if (hasExtremeCrisis) {
-        crisisMode = true;
-        showCrisisCard('crisis');
-      } else if (hasCrisis && !crisisMode) {
-        crisisMode = true;
-        showCrisisCard('distress');
+        if (hasCrisis && !crisisMode) {
+          crisisMode = true;
+          showCrisisCard('crisis');
+        } else if (hasDistress && !crisisMode) {
+          showCrisisCard('distress');
+        }
       }
-    }
-  } catch (err) {
+      isLoading = false;
+      document.getElementById('sendBtn').disabled = false;
+      document.getElementById('micBtn').disabled = false;
+      document.getElementById('userInput').focus();
+    });
+  }).catch(function(err) {
+    clearTimeout(timeout);
     removeTyping();
-    console.error('[Espelho] Erro:', err.name, err.message);
-    let msg = '';
-    if (err.name === 'AbortError') msg = 'A resposta demorou demais. Verifique sua conexão e tente de novo.';
+    console.error('[Espelho]', err.name, err.message);
+    var msg = '';
+    if (err.name === 'AbortError') msg = 'A resposta demorou demais. Verifique sua conexão.';
     else if (!navigator.onLine) msg = 'Sem internet. Reconecte e tente de novo.';
     else msg = 'Não foi possível conectar. Feche o app, reabra e tente de novo.';
     addMessage('ai', msg);
     document.getElementById('endWithSummaryBtn').disabled = false;
     document.getElementById('endWithSummaryBtn').textContent = 'encerrar';
-  }
-
-  isLoading = false;
-  document.getElementById('sendBtn').disabled = false;
-  document.getElementById('micBtn').disabled = false;
-  document.getElementById('userInput').focus();
+    isLoading = false;
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('micBtn').disabled = false;
+  });
 }
 </script>
 </body>
